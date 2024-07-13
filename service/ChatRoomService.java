@@ -3,6 +3,7 @@ package application.service;
 import application.dto.ChatRoomConverter;
 import application.dto.ChatRoomDto;
 import application.entity.ChatRoom;
+import application.exception.type.NoContentException;
 import application.repository.ChatRoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,11 +18,10 @@ public class ChatRoomService {
 
     private final ChatRoomRepository chatRoomRepository;
 
-    public List<ChatRoomDto> getUserChatRooms(String username){
-        Optional<Set<ChatRoom>> chats = chatRoomRepository.findChatRoomsByUsername(username);
-        if (chats.isPresent())
-            return chats.get().stream().map(chat -> ChatRoomConverter.convertToChatRoomDto(chat, username)).toList();
-        else
-            return null;
+    public List<ChatRoomDto> getUserChatRooms(String username) throws NoContentException {
+        Set<ChatRoom> chatRooms = chatRoomRepository.findChatRoomsByUsername(username)
+                .orElseThrow(() -> new NoContentException("You don't have any chats yet"));
+        return chatRooms
+                .stream().map(chat -> ChatRoomConverter.convertToChatRoomDto(chat, username)).toList();
     }
 }

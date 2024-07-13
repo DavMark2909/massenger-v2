@@ -2,6 +2,7 @@ package application.controller;
 
 
 import application.dto.ChatRoomDto;
+import application.exception.type.NoContentException;
 import application.service.ChatRoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class MainController {
     private final ChatRoomService chatRoomService;
 
     @GetMapping("/chats/{username}")
-    public ResponseEntity<List<ChatRoomDto>> getChatRooms(@PathVariable String username){
+    public ResponseEntity<List<ChatRoomDto>> getChatRooms(@PathVariable String username) throws NoContentException {
         return ResponseEntity.ok(chatRoomService.getUserChatRooms(username));
     }
 }
