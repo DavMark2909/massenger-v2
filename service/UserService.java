@@ -15,4 +15,8 @@ public class UserService {
     public User findUserByFullname(String fullname) throws NotFoundException {
         return userRepository.findUserByFullname(fullname).orElseThrow(() -> new NotFoundException(String.format("User %s wasn't found")));
     }
+
+    public User findUserByUsername(String username) throws NotFoundException {
+        return userRepository.findUserByUsername(username).orElseThrow(() -> new NotFoundException(String.format("User with username %s doesn't exist")));
+    }
 }

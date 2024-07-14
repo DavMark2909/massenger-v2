@@ -1,4 +1,4 @@
-package application.dto;
+package application.dto.message;
 
 import lombok.Builder;
 import lombok.Data;

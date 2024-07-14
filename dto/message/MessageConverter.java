@@ -1,4 +1,4 @@
-package application.dto;
+package application.dto.message;
 
 import application.entity.Message;
 
