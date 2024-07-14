@@ -13,6 +13,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -24,8 +25,8 @@ public class MainController {
     private final ChatRoomService chatRoomService;
     private final UserService userService;
 
-    @GetMapping("/chats/{username}")
-    public ResponseEntity<List<ChatRoomDto>> getChatRooms(@PathVariable String username) throws NoContentException {
+    @GetMapping("/chats")
+    public ResponseEntity<List<ChatRoomDto>> getChatRooms(@RequestParam("username") String username) throws NoContentException {
         return ResponseEntity.ok(chatRoomService.getUserChatRooms(username));
     }
 
