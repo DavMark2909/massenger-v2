@@ -4,7 +4,6 @@ import application.entity.ChatRoom;
 
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-import java.util.List;
 
 public class ChatRoomConverter {
 

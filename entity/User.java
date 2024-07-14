@@ -19,8 +19,7 @@ public class User {
     private int id;
 
     private String username;
-    private String lastname;
-    private String name;
+    private String fullname;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_rooms",
