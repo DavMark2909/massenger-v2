@@ -10,9 +10,8 @@ import org.springframework.web.context.request.WebRequest;
 @ControllerAdvice
 public class MyExceptionHandler {
 
-    @ExceptionHandler(NoContentException.class)
+    @ExceptionHandler(MyException.class)
     public ResponseEntity<?> handleResourceNotFoundException(NoContentException ex, WebRequest request) {
-        ErrorDetails errorDetails = new ErrorDetails(ex.getMessage());
-        return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(ex.getMessage(), ex.getStatus());
     }
 }

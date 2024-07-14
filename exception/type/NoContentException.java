@@ -1,8 +1,11 @@
 package application.exception.type;
 
-public class NoContentException extends Exception{
+import application.exception.MyException;
+import org.springframework.http.HttpStatus;
+
+public class NoContentException extends MyException{
 
     public NoContentException(String message) {
-        super(message);
+        super(HttpStatus.NO_CONTENT, message);
     }
 }
