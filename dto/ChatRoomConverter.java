@@ -19,7 +19,8 @@ public class ChatRoomConverter {
         return ChatRoomDto.builder()
                 .id(chat.getId())
                 .name(name)
-                .time(chat.getLastTime().format(DateTimeFormatter.ofPattern("MMMM d, h:mm a")).toString())
+                .time(chat.getLastTime().format(DateTimeFormatter.ofPattern("MMMM d, h:mm a")))
+                .personal(chat.isPersonal())
                 .build();
     }
 }
