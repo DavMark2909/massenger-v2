@@ -43,7 +43,7 @@ public class ChatRoomService {
 
     public List<MessageDto> findChatRoomContentByTwoNames(String username, String searcher) throws NoContentException {
         ChatRoom chatRoom = findChatRoomByTwoNames(username, searcher);
-        return chatRoom.getMessages().stream().map(MessageConverter::convertToMessageDto).toList();
+        return chatRoom.getMessages().stream().map(message -> MessageConverter.convertToMessageDto(message, chatRoom.getName())).toList();
     }
 
     public ChatRoom createChatRoom(String receiver, String sender) throws NotFoundException {

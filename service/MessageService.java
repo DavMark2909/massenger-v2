@@ -40,6 +40,6 @@ public class MessageService {
         Message savedMessage = messageRepository.save(message);
         chatRoom.setLastTime(moment);
         chatRoomService.saveChatRoom(chatRoom);
-        return MessageConverter.convertToMessageDto(savedMessage);
+        return MessageConverter.convertToMessageDto(savedMessage, chatRoom.getName());
     }
 }
