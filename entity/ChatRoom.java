@@ -1,9 +1,6 @@
 package application.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,6 +17,7 @@ import java.util.Set;
 @Entity
 public class ChatRoom {
     @Id
+    @GeneratedValue
     private int id;
     private String name;
     private LocalDateTime lastTime;
