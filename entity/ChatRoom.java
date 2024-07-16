@@ -23,7 +23,7 @@ public class ChatRoom {
     private LocalDateTime lastTime;
     private boolean personal;
 
-    @OneToMany(mappedBy = "chat")
+    @OneToMany(mappedBy = "chat", fetch = FetchType.EAGER)
     private List<Message> messages;
 
     @ManyToMany(mappedBy = "chats")

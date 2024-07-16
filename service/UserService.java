@@ -13,10 +13,14 @@ public class UserService {
     private final UserRepository userRepository;
 
     public User findUserByFullname(String fullname) throws NotFoundException {
-        return userRepository.findUserByFullname(fullname).orElseThrow(() -> new NotFoundException(String.format("User %s wasn't found")));
+        return userRepository.findByFullname(fullname).orElseThrow(() -> new NotFoundException(String.format("User %s wasn't found", fullname)));
     }
 
     public User findUserByUsername(String username) throws NotFoundException {
-        return userRepository.findUserByUsername(username).orElseThrow(() -> new NotFoundException(String.format("User with username %s doesn't exist")));
+        return userRepository.findByUsername(username).orElseThrow(() -> new NotFoundException(String.format("User with username %s doesn't exist", username)));
+    }
+
+    public User saveUser(User user){
+        return userRepository.save(user);
     }
 }

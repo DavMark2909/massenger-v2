@@ -32,7 +32,7 @@ public class ChatRoomService {
 
     public String getRoomName(String username, String username1){
         String[] names = {username, username1};
-        Arrays.sort(names);
+        Arrays.sort(names, String.CASE_INSENSITIVE_ORDER);
         return String.format("%s_%s", names[0], names[1]);
     }
 
@@ -48,14 +48,16 @@ public class ChatRoomService {
 
     public ChatRoom createChatRoom(String receiver, String sender) throws NotFoundException {
         ChatRoom room = new ChatRoom();
-        User first = userService.findUserByFullname(receiver);
-        User second = userService.findUserByFullname(sender);
+        User first = userService.findUserByUsername(receiver);
+        User second = userService.findUserByUsername(sender);
         room.setName(getRoomName(receiver, sender));
         room.setParticipants(Set.of(first, second));
         room.setPersonal(true);
         ChatRoom savedRoom = chatRoomRepository.save(room);
         first.getChats().add(savedRoom);
         second.getChats().add(savedRoom);
+        userService.saveUser(first);
+        userService.saveUser(second);
         return savedRoom;
     }
 
