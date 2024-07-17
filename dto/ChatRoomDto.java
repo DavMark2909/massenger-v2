@@ -9,5 +9,6 @@ public class ChatRoomDto {
     private int id;
     private String time;
     private String name;
+    private String chatName;
     private boolean personal;
 }

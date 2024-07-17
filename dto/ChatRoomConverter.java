@@ -21,6 +21,7 @@ public class ChatRoomConverter {
                 .name(name)
                 .time(chat.getLastTime().format(DateTimeFormatter.ofPattern("MMMM d, h:mm a")))
                 .personal(chat.isPersonal())
+                .chatName(chat.getName())
                 .build();
     }
 }
