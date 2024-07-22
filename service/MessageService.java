@@ -26,12 +26,14 @@ public class MessageService {
         ChatRoom chatRoom;
         try {
             chatRoom = chatRoomService.findChatRoomByTwoNames(payload.getReceiver(), payload.getSender());
+//            chatRoom = chatRoomService.findChatRoomByTwoNames("Mark2909", "regdji");
         } catch (NoContentException e) {
             chatRoom = chatRoomService.createChatRoom(payload.getReceiver(), payload.getSender());
         }
         Message message = new Message();
         message.setContent(payload.getContent());
         message.setSenderUsername(payload.getSender());
+//        message.setSenderUsername("regdji");
         message.setRequestBased(payload.isRequestBased());
         chatRoom.getMessages().add(message);
         message.setChat(chatRoom);
