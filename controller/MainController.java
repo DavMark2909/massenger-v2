@@ -34,7 +34,8 @@ public class MainController {
     @MessageMapping("/chat")
     public void processMessage(@Payload MessagePayload message) throws NotFoundException {
         MessageDto messageDto = messageService.saveMessage(message);
-        template.convertAndSendToUser(message.getReceiver(), "/queue/messages", messageDto);
+//        template.convertAndSendToUser(message.getReceiver(), "/queue/messages", messageDto);
+        template.convertAndSendToUser("Mark2909", "/queue/messages", messageDto);
     }
 
     @GetMapping("/chats")
