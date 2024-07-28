@@ -4,6 +4,7 @@ package application.controller;
 import application.dto.ChatRoomDto;
 import application.dto.message.MessageDto;
 import application.dto.message.MessagePayload;
+import application.dto.system.SystemMessageDto;
 import application.entity.User;
 import application.exception.type.NoContentException;
 import application.exception.type.NotFoundException;
@@ -16,9 +17,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -54,6 +53,12 @@ public class MainController {
     public ResponseEntity<?> findChat(@PathVariable String name, String username) throws NotFoundException, NoContentException {
         User user = userService.findUserByFullname(name);
         return ResponseEntity.ok(chatRoomService.findChatRoomContentByTwoNames(user.getUsername(), username));
+    }
+
+    @PostMapping("/chats/create-system-message")
+    public void createSystemMessage(@RequestBody SystemMessageDto dto) throws NotFoundException {
+        MessageDto msgDto = messageService.saveSystemMessage(dto);
+        template.convertAndSendToUser(dto.getReceiverUsername(), "queue/messages", msgDto);
     }
 
 //    find method to create a new group chat

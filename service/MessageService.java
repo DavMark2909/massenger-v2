@@ -3,6 +3,7 @@ package application.service;
 import application.dto.message.MessageConverter;
 import application.dto.message.MessageDto;
 import application.dto.message.MessagePayload;
+import application.dto.system.SystemMessageDto;
 import application.entity.ChatRoom;
 import application.entity.Message;
 import application.exception.type.NoContentException;
@@ -40,6 +41,28 @@ public class MessageService {
         LocalDateTime moment = LocalDateTime.now();
         message.setTime(moment);
         Message savedMessage = messageRepository.save(message);
+        chatRoom.setLastTime(moment);
+        chatRoomService.saveChatRoom(chatRoom);
+        return MessageConverter.convertToMessageDto(savedMessage, chatRoom.getName());
+    }
+
+    @Transactional
+    public MessageDto saveSystemMessage(SystemMessageDto dto) throws NotFoundException {
+        ChatRoom chatRoom;
+        try{
+            chatRoom = chatRoomService.findChatRoomByTwoNames(dto.getReceiverUsername(), "system");
+        } catch (NoContentException e){
+            chatRoom = chatRoomService.createChatRoom(dto.getReceiverUsername(), "system");
+        }
+        Message msg = new Message();
+        msg.setRequestBased(true);
+        msg.setContent(dto.getContent());
+        msg.setSenderUsername("system");
+        chatRoom.getMessages().add(msg);
+        msg.setChat(chatRoom);
+        LocalDateTime moment = LocalDateTime.now();
+        msg.setTime(moment);
+        Message savedMessage = messageRepository.save(msg);
         chatRoom.setLastTime(moment);
         chatRoomService.saveChatRoom(chatRoom);
         return MessageConverter.convertToMessageDto(savedMessage, chatRoom.getName());
