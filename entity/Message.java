@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(name = "message")
 public class Message {
 
     @Id
@@ -20,10 +21,10 @@ public class Message {
     private int id;
 
     private String content;
-    private String senderUsername;
+    private String username;
     private boolean requestBased;
 
-    private LocalDateTime time;
+    private LocalDateTime date;
 
     @ManyToOne
     @JoinColumn(name = "chat_id", nullable = false)

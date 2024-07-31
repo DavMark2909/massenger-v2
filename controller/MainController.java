@@ -57,6 +57,7 @@ public class MainController {
 
     @PostMapping("/chats/create-system-message")
     public void createSystemMessage(@RequestBody SystemMessageDto dto) throws NotFoundException {
+        System.out.println("Was able to enter the method");
         MessageDto msgDto = messageService.saveSystemMessage(dto);
         template.convertAndSendToUser(dto.getReceiverUsername(), "queue/messages", msgDto);
     }

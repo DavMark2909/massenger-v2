@@ -12,6 +12,7 @@ import application.repository.ChatRoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -38,8 +39,10 @@ public class ChatRoomService {
 
     public ChatRoom findChatRoomByTwoNames(String username, String sender) throws NoContentException {
         String name = getRoomName(username, sender);
-        return chatRoomRepository.findChatRoomByName(name, sender).orElseThrow(() -> new NoContentException("Here are no messages yet"));
+        return chatRoomRepository.findRealChatRoomByName(name, sender).orElseThrow(() -> new NoContentException("Here are no messages yet"));
     }
+
+
 
     public List<MessageDto> findChatRoomContentByTwoNames(String username, String searcher) throws NoContentException {
         ChatRoom chatRoom = findChatRoomByTwoNames(username, searcher);
@@ -59,6 +62,10 @@ public class ChatRoomService {
         userService.saveUser(first);
         userService.saveUser(second);
         return savedRoom;
+    }
+
+    public ChatRoom findChatRoomById(int id) throws NotFoundException {
+        return chatRoomRepository.findChatRoomById(id).orElseThrow(() -> new NotFoundException("Didnt find a system chat"));
     }
 
     public void saveChatRoom(ChatRoom chatRoom){

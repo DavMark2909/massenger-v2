@@ -12,7 +12,7 @@ import java.util.Set;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
+@Entity(name = "user")
 public class User {
 
     @Id
@@ -21,6 +21,9 @@ public class User {
 
     private String username;
     private String fullname;
+
+    @Column(name = "chat_id")
+    private Integer chatId;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_rooms",

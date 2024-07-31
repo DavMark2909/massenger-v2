@@ -15,13 +15,18 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(name = "chat")
 public class ChatRoom {
     @Id
     @GeneratedValue
     private int id;
+
     private String name;
+
     private LocalDateTime lastTime;
+
     private boolean personal;
+    private boolean systematic;
 
     @OneToMany(mappedBy = "chat", fetch = FetchType.EAGER)
     private List<Message> messages;
