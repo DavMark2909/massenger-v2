@@ -9,6 +9,7 @@ import application.entity.Message;
 import application.entity.User;
 import application.exception.type.NoContentException;
 import application.exception.type.NotFoundException;
+import application.rabbitmq.dto.TaskMessage;
 import application.repository.MessageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -48,6 +49,24 @@ public class MessageService {
         chatRoom.setLastTime(moment);
         chatRoomService.saveChatRoom(chatRoom);
         return MessageConverter.convertToMessageDto(savedMessage, chatRoom.getName());
+    }
+
+    public MessageDto saveRabbitSystemMessage(TaskMessage message) throws NotFoundException {
+        User user = userService.findUserByFullname(message.getReceiverUsername());
+        ChatRoom chat = chatRoomService.findChatRoomById(user.getChatId());
+
+        Message msg = new Message();
+        msg.setRequestBased(true);
+        msg.setContent(message.getContent());
+        msg.setUsername("system");
+        msg.setChat(chat);
+        LocalDateTime now = LocalDateTime.now();
+        msg.setDate(now);
+        Message savedMessage = messageRepository.save(msg);
+
+        chat.setLastTime(now);
+        chatRoomService.saveChatRoom(chat);
+        return MessageConverter.convertToMessageDto(savedMessage, chat.getName());
     }
 
     @Transactional

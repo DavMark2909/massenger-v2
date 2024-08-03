@@ -10,15 +10,14 @@ import application.exception.type.NoContentException;
 import application.exception.type.NotFoundException;
 import application.repository.ChatRoomRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
+@Log4j2
 public class ChatRoomService {
 
     private final ChatRoomRepository chatRoomRepository;
@@ -37,14 +36,19 @@ public class ChatRoomService {
         return String.format("%s_%s", names[0], names[1]);
     }
 
-    public ChatRoom findChatRoomByTwoNames(String username, String sender) throws NoContentException {
-        String name = getRoomName(username, sender);
-        return chatRoomRepository.findRealChatRoomByName(name, sender).orElseThrow(() -> new NoContentException("Here are no messages yet"));
+    public ChatRoom findChatRoomByTwoNames(String username, String sender) throws NoContentException, NotFoundException {
+        if (Objects.equals(sender, "system")){
+            User userByUsername = userService.findUserByUsername(username);
+            return chatRoomRepository.findChatRoomById(userByUsername.getChatId()).orElseThrow(() -> new NoContentException("Could not find a system message"));
+        } else {
+            String name = getRoomName(username, sender);
+            return chatRoomRepository.findRealChatRoomByName(name, sender).orElseThrow(() -> new NoContentException("Here are no messages yet"));
+        }
     }
 
 
 
-    public List<MessageDto> findChatRoomContentByTwoNames(String username, String searcher) throws NoContentException {
+    public List<MessageDto> findChatRoomContentByTwoNames(String username, String searcher) throws NoContentException, NotFoundException {
         ChatRoom chatRoom = findChatRoomByTwoNames(username, searcher);
         return chatRoom.getMessages().stream().map(message -> MessageConverter.convertToMessageDto(message, chatRoom.getName())).toList();
     }

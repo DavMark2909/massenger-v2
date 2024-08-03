@@ -18,11 +18,21 @@ import java.util.List;
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
+//    @Override
+//    public void configureMessageBroker(MessageBrokerRegistry registry) {
+////        this one is used when a user wants to subscribe to the queue
+//        registry.enableSimpleBroker("/user");
+////        this one is used when i send a message to the message system
+//        registry.setApplicationDestinationPrefixes("/app");
+//        registry.setUserDestinationPrefix("/user");
+//
+//    }
+
     @Override
-    public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.enableSimpleBroker("/user");
-        registry.setApplicationDestinationPrefixes("/app");
-        registry.setUserDestinationPrefix("/user");
+    public void configureMessageBroker(MessageBrokerRegistry config) {
+        config.setApplicationDestinationPrefixes("/app");
+        config.enableStompBrokerRelay("/topic").setRelayHost("localhost").setRelayPort(61613).setClientLogin("guest")
+                .setClientPasscode("guest");
     }
 
     @Override
