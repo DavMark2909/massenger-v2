@@ -3,6 +3,7 @@ package application.service;
 import application.dto.message.MessageConverter;
 import application.dto.message.MessageDto;
 import application.dto.message.MessagePayload;
+import application.dto.system.ConverterToSystemMessage;
 import application.dto.system.SystemMessageDto;
 import application.entity.ChatRoom;
 import application.entity.Message;
@@ -51,7 +52,7 @@ public class MessageService {
         return MessageConverter.convertToMessageDto(savedMessage, chatRoom.getName());
     }
 
-    public MessageDto saveRabbitSystemMessage(TaskMessage message) throws NotFoundException {
+    public SystemMessageDto saveRabbitSystemMessage(TaskMessage message) throws NotFoundException {
         User user = userService.findUserByFullname(message.getReceiverUsername());
         ChatRoom chat = chatRoomService.findChatRoomById(user.getChatId());
 
@@ -66,26 +67,26 @@ public class MessageService {
 
         chat.setLastTime(now);
         chatRoomService.saveChatRoom(chat);
-        return MessageConverter.convertToMessageDto(savedMessage, chat.getName());
+        return ConverterToSystemMessage.convertToSystemMessageDto(savedMessage, chat.getName(), user.getUsername());
     }
 
-    @Transactional
-    public MessageDto saveSystemMessage(SystemMessageDto dto) throws NotFoundException {
-        User userByFullname = userService.findUserByFullname(dto.getReceiverUsername());
-        System.out.println(userByFullname.getFullname());
-        ChatRoom chat = chatRoomService.findChatRoomById(userByFullname.getChatId());
-
-        Message msg = new Message();
-        msg.setRequestBased(true);
-        msg.setContent(dto.getContent());
-        msg.setUsername("system");
-        msg.setChat(chat);
-        LocalDateTime now = LocalDateTime.now();
-        msg.setDate(now);
-        Message savedMessage = messageRepository.save(msg);
-
-        chat.setLastTime(now);
-        chatRoomService.saveChatRoom(chat);
-        return MessageConverter.convertToMessageDto(savedMessage, chat.getName());
-    }
+//    @Transactional
+//    public MessageDto saveSystemMessage(SystemMessageDto dto) throws NotFoundException {
+//        User userByFullname = userService.findUserByFullname(dto.getReceiverUsername());
+//        System.out.println(userByFullname.getFullname());
+//        ChatRoom chat = chatRoomService.findChatRoomById(userByFullname.getChatId());
+//
+//        Message msg = new Message();
+//        msg.setRequestBased(true);
+//        msg.setContent(dto.getContent());
+//        msg.setUsername("system");
+//        msg.setChat(chat);
+//        LocalDateTime now = LocalDateTime.now();
+//        msg.setDate(now);
+//        Message savedMessage = messageRepository.save(msg);
+//
+//        chat.setLastTime(now);
+//        chatRoomService.saveChatRoom(chat);
+//        return MessageConverter.convertToMessageDto(savedMessage, chat.getName());
+//    }
 }
