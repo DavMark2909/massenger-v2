@@ -1,6 +1,8 @@
 package application.rabbitmq;
 
+import application.dto.message.MessageConverter;
 import application.dto.message.MessageDto;
+import application.dto.system.SystemMessageDto;
 import application.rabbitmq.dto.TaskMessage;
 import application.service.MessageService;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +24,15 @@ public class RabbitConsumer {
     @RabbitListener(queues = {"${rabbitmq.queue.name}"})
     public void consume(TaskMessage message){
         log.info(String.format("Got the message %s", message.toString()));
-        MessageDto messageDto = messageService.saveRabbitSystemMessage(message);
-        template.convertAndSend("/topic/messages", messageDto);
+        SystemMessageDto dto = messageService.saveRabbitSystemMessage(message);
+
+        //This one worked with non-user message sent
+//        template.convertAndSend("/topic/messages", messageDto);
+
+        MessageDto messageDto = MessageConverter.convertToMessageDtoFrom(dto);
+        String dest = String.format("/queue/%s", dto.getUsername());
+
+        template.convertAndSend(dest, messageDto);
 //        log.info("Got the message");
 //        template.convertAndSendToUser(message.getReceiverUsername(), "/queue/messages", message.getContent());
     }
